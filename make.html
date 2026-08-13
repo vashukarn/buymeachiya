@@ -6,6 +6,14 @@
 <title>Make your page — Buy Me a Chiya</title>
 <meta name="description" content="Fill in four boxes, get a link to your own chiya page. No account, no server, no cut.">
 
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KHF4Z8ST');</script>
+<!-- End Google Tag Manager -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mukta:wght@600;800&display=swap" rel="stylesheet">
@@ -84,6 +92,11 @@
 </style>
 </head>
 <body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KHF4Z8ST"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <header>
   <nav class="wrap">
@@ -327,7 +340,8 @@ $('form').addEventListener('submit', e => {
   scrollTo({top: 0, behavior: 'smooth'});
 
   // count that a link was made — the tally only, never the link or anything inside it
-  if (window.gtag) gtag('event', 'link_created');
+  window.dataLayer = window.dataLayer || [];
+  dataLayer.push({ event: 'link_created' });
 });
 
 $('copy').addEventListener('click', async () => {
@@ -345,10 +359,6 @@ $('again').addEventListener('click', () => {
 });
 </script>
 
-<!-- Google Analytics. Replace G-XXXXXXXXXX with your own Measurement ID.
-     Deliberately absent from page.html: GA reports the full URL, and there the
-     URL contains someone's phone and bank number. -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){ dataLayer.push(arguments); }

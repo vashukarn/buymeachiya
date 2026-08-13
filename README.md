@@ -30,8 +30,11 @@ payment-service-provider regime.
 
 - **Never add an analytics script to `page.html`.** Payment details live in the address
   bar there, and most analytics tools report the full URL.
-- Google Analytics runs only on `index.html` and `make.html`. Replace the placeholder
-  `G-XXXXXXXXXX` Measurement ID with your own.
+- Google Tag Manager (`GTM-KHF4Z8ST`) loads only on `index.html` and `make.html`.
+  Anything added to that container inherits both pages, so check any new tag before
+  publishing it.
+- Making a link pushes `{ event: 'link_created' }` to the dataLayer. Add a Custom Event
+  trigger named `link_created` in GTM to count it.
 - `page.html` renders untrusted input from the fragment: use `textContent`, never
   `innerHTML`, and keep the https-only check on the QR image URL.
 
