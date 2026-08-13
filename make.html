@@ -46,6 +46,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 .head .dev{font-size:1.1rem;color:var(--magenta);margin-bottom:12px}
 .head h1{font-size:clamp(2.2rem,5vw,3.6rem)}
 .head p{margin-top:18px;max-width:46ch}
+.reopen{background:#fff;border:var(--line);box-shadow:var(--pop-sm);padding:20px;margin-bottom:34px}
+.reopen .link-box{margin:0;max-width:none;box-shadow:none;border:var(--line)}
+.reopen .hint{margin-top:10px}
 
 .step{background:#fff;border:var(--line);box-shadow:var(--pop);padding:30px;margin-bottom:26px;position:relative}
 .step > .num{
@@ -154,7 +157,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="head rise">
         <div class="dev">आफ्नो पेज बनाउनुहोस्</div>
         <h1>Make your <span class="hl tilt">page</span></h1>
-        <p>Fill this in and you get a link. That link <em>is</em> your page — everything is stored inside the URL itself. Nothing is sent anywhere, and there's nothing to sign up for.</p>
+        <p>Fill this in and you get a link, a QR and an embed snippet. That link <em>is</em> your page: everything lives inside the URL itself. Nothing is sent anywhere, and there is nothing to sign up for.</p>
+      </div>
+
+
+      <div class="reopen">
+        <label class="lbl mono" for="reopen">Already have a link? Paste it here to change it</label>
+        <div class="link-box">
+          <input id="reopen" type="text" placeholder="buymeachiya.vijaykarn.com.np/page.html#..." spellcheck="false">
+          <button type="button" id="loadLink">Load</button>
+        </div>
+        <div class="hint" id="reopenMsg">Editing makes a new link. Your old one keeps working exactly as it is.</div>
       </div>
 
       <section class="step rise">
@@ -266,7 +279,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="qr-block">
       <b>Or share a QR</b>
       <p>Print it, stick it on your stall, or drop it in a story. It opens your page, so people can pick an amount themselves.</p>
-      <div class="qr-holder"><canvas id="qr" width="224" height="224"></canvas></div>
+      <div class="qr-holder"><canvas id="qrCanvas" width="224" height="224"></canvas></div>
       <br>
       <button class="btn btn-yellow" type="button" id="dlQr">Download PNG</button>
     </div>
@@ -341,6 +354,59 @@ function draw(){
 FIELDS.forEach(id => $(id).addEventListener('input', draw));
 draw();
 
+/* ---- reopen an existing link ----
+   Nothing is stored, so there is no page to overwrite: editing decodes the payload,
+   refills the form, and produces a NEW link. The original link keeps working, because
+   it is a self-contained string its owner holds. Anyone could already do this by hand
+   with atob(); this only saves the typing. */
+function decodeHash(hash){
+  try {
+    let b = hash.replace(/-/g, '+').replace(/_/g, '/');
+    b += '='.repeat((4 - b.length % 4) % 4);
+    const raw = decodeURIComponent(escape(atob(b)));
+    if (raw[0] === '{') {
+      const j = JSON.parse(raw);
+      return [j.n, j.b, j.r, j.e, j.s, j.k, j.a, j.h, j.q].map(v => v == null ? '' : String(v));
+    }
+    return raw.split('\x1f');
+  } catch { return null; }
+}
+
+function loadFrom(text){
+  const raw = String(text).trim();
+  if (!raw) return false;
+  const hash = raw.includes('#') ? raw.slice(raw.indexOf('#') + 1) : raw;
+  const f = decodeHash(hash);
+  if (!f || !f[0]) return false;
+
+  const ids = ['name','bio','rate','emoji','esewa','khalti','bank','holder','qr'];
+  ids.forEach((id, i) => { $(id).value = f[i] || ''; });
+  if (!$('rate').value) $('rate').value = '50';
+  if (!$('emoji').value) $('emoji').value = '\u{1F375}';
+  draw();
+  return true;
+}
+
+$('loadLink').addEventListener('click', () => {
+  const msg = $('reopenMsg');
+  if (loadFrom($('reopen').value)) {
+    msg.textContent = 'Loaded. Change what you like, then make a new link.';
+    $('name').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else {
+    msg.textContent = "That doesn't look like a Buy Me a Chiya link.";
+  }
+});
+
+$('reopen').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); $('loadLink').click(); }
+});
+
+// make.html#<code> opens straight into an editable form
+if (location.hash.length > 1) {
+  if (loadFrom(location.hash.slice(1)))
+    $('reopenMsg').textContent = 'Loaded from your link. Change what you like, then make a new one.';
+}
+
 /* ---- build the link ---- */
 /* The page IS the URL, so every character counts. Fields go in a fixed order joined by
    \x1f (a control char nobody can type, so no escaping), trailing empties dropped, then
@@ -398,7 +464,7 @@ function drawQr(text){
 
   const n = qr.getModuleCount(), quiet = 4, px = 8;
   const size = (n + quiet * 2) * px;
-  const c = $('qr');
+  const c = $('qrCanvas');
   c.width = c.height = size;
 
   const g = c.getContext('2d');
@@ -413,7 +479,7 @@ function drawQr(text){
 $('dlQr').addEventListener('click', () => {
   const a = document.createElement('a');
   a.download = 'buymeachiya-qr.png';
-  a.href = $('qr').toDataURL('image/png');
+  a.href = $('qrCanvas').toDataURL('image/png');
   a.click();
 });
 
@@ -436,6 +502,7 @@ $('copyEmbed').addEventListener('click', async () => {
 $('again').addEventListener('click', () => {
   $('result').classList.remove('on');
   $('form').style.display = '';
+  $('reopen').value = $('out').value;      // so the link is to hand if they leave and return
   scrollTo({top: 0, behavior: 'smooth'});
 });
 </script>

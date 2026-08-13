@@ -34,6 +34,14 @@ stylesheets, so it adds no third-party requests to the host page.
 
 ![Buy Me a Chiya](linkedin.png)
 
+## Editing a page
+
+There are no accounts, so there is nothing to log into. Paste an existing link back into
+the generator, or open `make.html#<code>`, and the form refills from the payload. Editing
+produces a **new** link and leaves the original working, since the original is a
+self-contained string its owner holds. This adds no capability: anyone with a link could
+already decode and rebuild it with `atob()`.
+
 ## Files
 
 | File | Purpose |
@@ -42,6 +50,8 @@ stylesheets, so it adds no third-party requests to the host page.
 | `make.html` | Generator — builds the link |
 | `page.html` | Renders a creator's page from the URL fragment |
 | `embed.html` | Compact card rendered inside the iframe |
+| `lib/qrcode-generator.js` | QR encoder (MIT, Kazuhiko Arase), shared with fonepay-qr-studio |
+| `fonts/`, `fonts.css` | Self-hosted fonts, so no third-party requests |
 | `embed.js` | One-tag loader that hosts paste on their site |
 | `terms.html`, `privacy.html` | Legal pages |
 | `linkedin.png`, `linkedin-source.html` | Share image and the template it renders from |
