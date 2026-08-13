@@ -251,10 +251,16 @@ h2 .dev{display:block;font-size:.36em;color:var(--magenta);margin-bottom:.4em}
 menu.addEventListener('click', e => { if (e.target.closest('a')) menu.open = false; });
 </script>
 
-<!-- Visit counting. No cookies, no personal data, aggregate only.
-     Replace the subdomain below with your own account code. -->
-<script data-goatcounter="https://buymeachiya.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+<!-- Google Analytics. Replace G-XXXXXXXXXX with your own Measurement ID.
+     Deliberately absent from page.html: GA reports the full URL, and there the
+     URL contains someone's phone and bank number. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
 
 </body>
 </html>

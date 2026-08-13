@@ -30,8 +30,8 @@ payment-service-provider regime.
 
 - **Never add an analytics script to `page.html`.** Payment details live in the address
   bar there, and most analytics tools report the full URL.
-- Visitor counting runs only on `index.html` and `make.html`. Replace the GoatCounter
-  code with your own before deploying.
+- Google Analytics runs only on `index.html` and `make.html`. Replace the placeholder
+  `G-XXXXXXXXXX` Measurement ID with your own.
 - `page.html` renders untrusted input from the fragment: use `textContent`, never
   `innerHTML`, and keep the https-only check on the QR image URL.
 

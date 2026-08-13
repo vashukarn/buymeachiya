@@ -327,7 +327,7 @@ $('form').addEventListener('submit', e => {
   scrollTo({top: 0, behavior: 'smooth'});
 
   // count that a link was made — the tally only, never the link or anything inside it
-  window.goatcounter?.count({ path: 'link-created', title: 'Link created', event: true });
+  if (window.gtag) gtag('event', 'link_created');
 });
 
 $('copy').addEventListener('click', async () => {
@@ -345,10 +345,16 @@ $('again').addEventListener('click', () => {
 });
 </script>
 
-<!-- Visit counting. No cookies, no personal data, aggregate only.
-     Replace the subdomain below with your own account code. -->
-<script data-goatcounter="https://buymeachiya.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+<!-- Google Analytics. Replace G-XXXXXXXXXX with your own Measurement ID.
+     Deliberately absent from page.html: GA reports the full URL, and there the
+     URL contains someone's phone and bank number. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
 
 </body>
 </html>
