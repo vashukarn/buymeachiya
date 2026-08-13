@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buy me a chiya</title>
+<meta name="robots" content="noindex">
+
+<style>
+/* Self-contained on purpose. This runs inside other people's sites, so it loads no
+   external fonts or stylesheets — pulling Google Fonts here would hand their
+   visitors' IP addresses to Google without them ever agreeing to it. */
+:root{
+  --cream:#FFF5DD; --ink:#111; --yellow:#F4F242; --magenta:#B82297;
+  --line:3px solid #111;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:transparent;color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:15px;line-height:1.5;padding:4px;
+}
+.card{background:var(--cream);border:var(--line);box-shadow:5px 5px 0 var(--ink);padding:20px;text-align:center}
+.emoji{font-size:52px;line-height:1;display:block}
+.name{font-weight:800;font-size:19px;text-transform:uppercase;letter-spacing:-.01em;margin-top:8px;line-height:1.15}
+.bio{font-size:13px;margin-top:6px;opacity:.8}
+
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:16px}
+.tier{
+  background:#fff;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);
+  padding:9px 3px;cursor:pointer;font:inherit;color:inherit;transition:.1s;
+}
+.tier:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.tier[aria-pressed="true"]{background:var(--yellow);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.tier .c{font-size:14px;line-height:1}
+.tier .n{display:block;font-weight:800;font-size:11px;text-transform:uppercase;margin-top:5px}
+.tier .r{display:block;font-size:11px;opacity:.7;font-variant-numeric:tabular-nums}
+
+.total{
+  margin-top:14px;background:var(--ink);color:var(--cream);border:var(--line);
+  padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.total .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.total .amt{font-weight:800;font-size:21px;font-variant-numeric:tabular-nums}
+
+.byhand{font-size:11px;opacity:.7;margin-top:8px}
+
+.pays{margin-top:12px;text-align:left}
+.pay{
+  display:flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--ink);
+  box-shadow:2px 2px 0 var(--ink);padding:8px 10px;margin-bottom:7px;
+}
+.pay .t{flex:none;font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.6;width:52px}
+.pay .v{flex:1;font-size:13px;word-break:break-all;font-variant-numeric:tabular-nums}
+.pay button{
+  flex:none;border:2px solid var(--ink);background:var(--yellow);cursor:pointer;
+  font:inherit;font-weight:800;font-size:10px;text-transform:uppercase;padding:4px 8px;
+}
+.pay button:hover{background:var(--magenta);color:#fff}
+
+.foot{margin-top:12px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;opacity:.65}
+.foot a{color:inherit}
+.empty{padding:26px 10px;font-size:13px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+/* Untrusted input: the payload comes from the URL fragment, which anyone can craft.
+   Everything is written with textContent, never innerHTML. */
+const root = document.getElementById('root');
+const el = (tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+};
+
+function decode(hash){
+  try {
+    let b = hash.replace(/-/g, '+').replace(/_/g, '/');
+    b += '='.repeat((4 - b.length % 4) % 4);
+    const raw = decodeURIComponent(escape(atob(b)));
+    if (raw[0] === '{') return JSON.parse(raw);
+    const [n, b2, r, e, s, k, a, h, q] = raw.split('\x1f');
+    return { n, b: b2, r, e, s, k, a, h, q };
+  } catch { return null; }
+}
+
+const SITE = 'https://buymeachiya.vijaykarn.com.np';
+const d = location.hash.length > 1 ? decode(location.hash.slice(1)) : null;
+const card = el('div', 'card');
+
+if (!d || !d.n) {
+  const box = el('div', 'empty', 'This chiya link is missing or broken.');
+  card.append(box);
+} else {
+  const rate = Math.max(1, parseInt(d.r, 10) || 50);
+
+  card.append(el('span', 'emoji', d.e || '🍵'), el('div', 'name', d.n));
+  if (d.b) card.append(el('div', 'bio', d.b));
+
+  const tiers = el('div', 'tiers');
+  let cups = 3;
+  [[1,'☕','1 chiya'], [3,'☕☕','3 chiya'], [10,'🫖','Kettle']].forEach(([n, icon, label], i) => {
+    const b = el('button', 'tier');
+    b.type = 'button';
+    b.dataset.cups = n;
+    b.setAttribute('aria-pressed', i === 1);
+    b.append(el('span', 'c', icon), el('span', 'n', label), el('span', 'r', 'Rs. ' + n * rate));
+    tiers.append(b);
+  });
+  card.append(tiers);
+
+  const total = el('div', 'total');
+  const amt = el('span', 'amt', 'Rs. ' + 3 * rate);
+  total.append(el('span', 'lbl', 'You send'), amt);
+  card.append(total, el('div', 'byhand', 'Enter this amount yourself when you pay.'));
+
+  tiers.addEventListener('click', e => {
+    const b = e.target.closest('.tier');
+    if (!b) return;
+    for (const x of tiers.children) x.setAttribute('aria-pressed', x === b);
+    cups = Number(b.dataset.cups);
+    amt.textContent = 'Rs. ' + cups * rate;
+  });
+
+  const pays = el('div', 'pays');
+  [['eSewa', d.s], ['Khalti', d.k], ['Bank', d.a], ['Name', d.h]]
+    .filter(([, v]) => v)
+    .forEach(([label, v]) => {
+      const row = el('div', 'pay');
+      const btn = el('button', null, 'Copy');
+      btn.type = 'button';
+      btn.addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(v); }
+        catch { return; }               // clipboard is often blocked in a cross-site frame
+        btn.textContent = 'Copied';
+        setTimeout(() => btn.textContent = 'Copy', 1500);
+      });
+      row.append(el('span', 't', label), el('span', 'v', v), btn);
+      pays.append(row);
+    });
+  card.append(pays);
+
+  const foot = el('div', 'foot');
+  const a = el('a', null, 'Buy Me a Chiya');
+  a.href = SITE + '/';
+  a.target = '_blank';
+  a.rel = 'noopener';
+  foot.append(document.createTextNode('Powered by '), a);
+  card.append(foot);
+}
+
+root.append(card);
+
+// tell the host page how tall we are, so the iframe can size itself
+function reportHeight(){
+  const h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+  parent.postMessage({ chiyaHeight: h }, '*');
+}
+reportHeight();
+addEventListener('load', reportHeight);
+new ResizeObserver(reportHeight).observe(document.documentElement);
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@500;700&family=JetBrains+Mono:wght@500&family=Mukta:wght@800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1200px;height:1200px;overflow:hidden}
+body{
+  background:#FFF5DD;font-family:'Manrope',sans-serif;color:#111;
+  padding:82px 78px;position:relative;display:flex;flex-direction:column;
+}
+body::before{content:'';position:absolute;inset:30px;border:6px solid #111}
+.inner{position:relative;z-index:2;display:flex;flex-direction:column;height:100%}
+
+.badge{
+  align-self:flex-start;background:#111;color:#F4F242;border:5px solid #111;
+  font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:.22em;
+  text-transform:uppercase;padding:11px 20px;
+}
+h1{
+  font-family:'Archivo Black',sans-serif;font-size:88px;line-height:1.38;
+  text-transform:uppercase;letter-spacing:-.02em;margin-top:52px;
+}
+h1 .hl{
+  background:#F4F242;border:6px solid #111;box-shadow:11px 11px 0 #111;
+  display:inline-block;padding:2px 15px;line-height:1;transform:rotate(-1.4deg);
+}
+.mid{display:flex;align-items:center;gap:40px;margin-top:auto;margin-bottom:56px}
+.cup{font-size:270px;line-height:1;filter:drop-shadow(15px 15px 0 rgba(17,17,17,.15))}
+.say{flex:1}
+.say .big{font-family:'Archivo Black',sans-serif;font-size:52px;line-height:1.16;text-transform:uppercase}
+.say .small{font-size:29px;font-weight:500;margin-top:20px;line-height:1.45}
+.say .small b{background:#F4F242;box-shadow:4px 4px 0 #111;padding:2px 8px}
+
+.foot{display:flex;align-items:center;justify-content:space-between;gap:24px;border-top:6px solid #111;padding-top:30px}
+.url{
+  font-family:'JetBrains Mono',monospace;font-size:26px;letter-spacing:.04em;
+  background:#B82297;color:#fff;border:5px solid #111;padding:13px 20px;
+}
+.dev{font-family:'Mukta',sans-serif;font-weight:800;font-size:40px;color:#B82297}
+</style>
+</head>
+<body>
+<div class="inner">
+  <div class="badge">Built for Nepal</div>
+
+  <h1>Buy me a coffee <span class="hl">doesn't work</span> in Nepal.</h1>
+
+  <div class="mid">
+    <div class="say">
+      <div class="big">So I built one<br>that does.</div>
+      <div class="small">No account. No server. No database.<br><b>No cut, ever.</b></div>
+    </div>
+    <div class="cup">🍵</div>
+  </div>
+
+  <div class="foot">
+    <span class="url">buymeachiya.vijaykarn.com.np</span>
+    <span class="dev">चिया खुवाऊ</span>
+  </div>
+</div>
+</body>
+</html>

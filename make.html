@@ -266,6 +266,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a class="btn btn-yellow" id="tiny" href="#" target="_blank" rel="noopener noreferrer">Shorten at TinyURL ↗</a>
     </div>
 
+
+    <div class="shorten">
+      <b>Put it on your own website</b>
+      <p>Paste this where you want the card to appear. It works on any site that lets you add HTML: WordPress, Ghost, Webflow, a plain HTML page.</p>
+      <div class="link-box"><input id="embed" type="text" readonly><button type="button" id="copyEmbed">Copy</button></div>
+    </div>
+
     <div class="warn">
       <b>Keep this link safe.</b> There's no account to log back into — the link is the only copy of your page. Bookmark it. To change anything, come back here and make a new one.
     </div>
@@ -351,11 +358,14 @@ $('form').addEventListener('submit', e => {
 
   err.textContent = '';
 
-  const url = location.href.replace(/make\.html.*$/, '') + 'page.html#' + encode();
+  const hash = encode();
+  const url = location.href.replace(/make\.html.*$/, '') + 'page.html#' + hash;
   $('out').value = url;
   $('open').href = url;
   // TinyURL's own form, prefilled — the creator presses the button there, not here
   $('tiny').href = 'https://tinyurl.com/create.php?url=' + encodeURIComponent(url);
+  $('embed').value = '<script src="' + location.href.replace(/make\.html.*$/, '') +
+    'embed.js" data-chiya="' + hash + '"><' + '/script>';
   $('form').style.display = 'none';
   $('result').classList.add('on');
   scrollTo({top: 0, behavior: 'smooth'});
@@ -371,6 +381,14 @@ $('copy').addEventListener('click', async () => {
   catch { document.execCommand('copy'); }   // ponytail: fallback for file:// and old Safari
   $('copy').textContent = 'Copied!';
   setTimeout(() => $('copy').textContent = 'Copy', 1600);
+});
+
+$('copyEmbed').addEventListener('click', async () => {
+  $('embed').select();
+  try { await navigator.clipboard.writeText($('embed').value); }
+  catch { document.execCommand('copy'); }
+  $('copyEmbed').textContent = 'Copied!';
+  setTimeout(() => $('copyEmbed').textContent = 'Copy', 1600);
 });
 
 $('again').addEventListener('click', () => {
