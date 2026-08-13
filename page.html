@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buy me a chiya</title>
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mukta:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<style>
+.page{max-width:640px;margin-inline:auto;padding:52px 0 80px}
+@media(max-width:620px){.page{padding:32px 0 56px}}
+
+.card{background:#fff;border:var(--line);box-shadow:var(--pop-lg);padding:38px 32px;text-align:center}
+@media(max-width:620px){.card{padding:30px 22px}}
+
+.emoji{font-size:clamp(5rem,20vw,7.5rem);line-height:1;display:block}
+.name{font-family:'Archivo Black','Mukta',sans-serif;text-transform:uppercase;font-size:clamp(1.6rem,5vw,2.3rem);line-height:1.05;margin-top:12px}
+.bio{margin-top:14px;font-size:1.05rem}
+
+.ask{margin-top:34px;padding-top:26px;border-top:var(--line)}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.tier{
+  background:#fff;border:var(--line);box-shadow:var(--pop-sm);padding:16px 8px;cursor:pointer;
+  font-family:'Manrope',sans-serif;color:var(--ink);transition:transform .12s,box-shadow .12s,background .12s;
+}
+.tier:hover{transform:translate(-2px,-2px);box-shadow:var(--pop)}
+.tier[aria-pressed="true"]{background:var(--yellow);transform:translate(-2px,-2px);box-shadow:var(--pop)}
+.tier .cups{font-size:1.3rem;line-height:1}
+.tier .n{display:block;font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:.85rem;margin-top:8px}
+.tier .rs{display:block;font-family:'JetBrains Mono',monospace;font-size:.75rem;opacity:.7;margin-top:3px}
+
+.total{
+  margin-top:26px;background:var(--ink);color:var(--cream);border:var(--line);box-shadow:var(--pop);
+  padding:20px;display:flex;align-items:center;justify-content:space-between;gap:14px;
+}
+.total .amt{font-family:'Archivo Black',sans-serif;font-size:2rem;margin-left:auto}
+.copy-amt{
+  flex:none;border:var(--line);background:var(--yellow);color:var(--ink);cursor:pointer;padding:9px 14px;
+  font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:.7rem;
+}
+.copy-amt:hover{background:var(--magenta);color:#fff}
+.byhand{margin-top:12px;font-size:.85rem;opacity:.75;text-align:center}
+
+.pays{margin-top:26px;text-align:left}
+.pay{
+  display:flex;align-items:center;gap:12px;background:var(--cream);border:var(--line);
+  box-shadow:var(--pop-sm);padding:13px 15px;margin-bottom:12px;
+}
+.pay .tag{
+  flex:none;width:74px;font-family:'JetBrains Mono',monospace;font-size:.7rem;
+  letter-spacing:.08em;text-transform:uppercase;opacity:.65;
+}
+.pay .v{flex:1;font-family:'JetBrains Mono',monospace;font-size:.92rem;word-break:break-all}
+.pay button{
+  flex:none;border:var(--line);background:var(--yellow);cursor:pointer;padding:7px 13px;
+  font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:.7rem;
+}
+.pay button:hover{background:var(--magenta);color:#fff}
+
+.qr{margin-top:26px}
+.qr img{max-width:230px;width:100%;border:var(--line);box-shadow:var(--pop);background:#fff;padding:10px}
+.qr .cap{margin-top:14px}
+
+.made{text-align:center;margin-top:32px}
+.made a{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:.8rem}
+.made .credit{margin-top:16px;opacity:.65;font-size:.68rem}
+.made .credit a{font-family:'JetBrains Mono',monospace;font-size:.68rem;text-transform:uppercase}
+
+.empty{background:#fff;border:var(--line);box-shadow:var(--pop);padding:40px;text-align:center}
+.empty h2{margin-bottom:14px}
+</style>
+</head>
+<body>
+
+<main class="wrap page">
+  <div id="root"></div>
+
+  <div class="made">
+    <span class="mono">Made with</span>
+    <a href="make.html">Buy Me a Chiya — make your own, free →</a>
+    <div class="mono credit">
+      <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> ·
+      Made by <a href="https://vijaykarn.com.np" target="_blank" rel="noopener">Vashu Karn</a>
+    </div>
+  </div>
+</main>
+
+<script>
+/* Everything on this page comes from the URL hash — a stranger can craft one, so it is
+   untrusted input. Rendered with textContent only; the QR must be an https image.
+
+   Deliberately NO analytics script on this page, and none must ever be added. Many of them
+   report the full location, which here would ship someone's phone and bank number to a
+   third party. Counting belongs on index.html and make.html, where the URL holds nothing. */
+
+const root = document.getElementById('root');
+const el = (tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+};
+
+function decode(hash){
+  try {
+    let b = hash.replace(/-/g, '+').replace(/_/g, '/');
+    b += '='.repeat((4 - b.length % 4) % 4);          // padding is stripped when encoding
+    const raw = decodeURIComponent(escape(atob(b)));
+
+    // links made before the compact format are JSON — still honour them
+    if (raw[0] === '{') return JSON.parse(raw);
+
+    const [n, b2, r, e, s, k, a, h, q] = raw.split('\x1f');
+    return { n, b: b2, r, e, s, k, a, h, q };
+  } catch { return null; }
+}
+
+const d = location.hash.length > 1 ? decode(location.hash.slice(1)) : null;
+
+if (!d || !d.n) {
+  const box = el('div', 'empty');
+  box.append(
+    el('h2', null, 'Nothing here yet'),
+    el('p', null, 'This link is missing its page. Make your own in about a minute — no account, no cut.')
+  );
+  const a = el('a', 'btn', 'Make my page →');
+  a.href = 'make.html';
+  a.style.marginTop = '22px';
+  box.append(a);
+  root.append(box);
+} else {
+  const rate = Math.max(1, parseInt(d.r, 10) || 50);
+  document.title = 'Buy ' + d.n + ' a chiya';
+
+  const card = el('div', 'card');
+  card.append(
+    el('span', 'emoji', d.e || '🍵'),
+    el('div', 'name', d.n)
+  );
+  if (d.b) card.append(el('div', 'bio', d.b));
+
+  /* ---- pick an amount ---- */
+  const ask = el('div', 'ask');
+  ask.append(el('span', 'mono', 'Kati chiya? · कति चिया?'));
+
+  const tiers = el('div', 'tiers');
+  const OPTS = [[1,'☕','1 chiya'], [3,'☕☕☕','3 chiya'], [10,'🫖','Kettle']];
+  OPTS.forEach(([cups, icon, label], i) => {
+    const b = el('button', 'tier');
+    b.type = 'button';
+    b.dataset.cups = cups;
+    b.setAttribute('aria-pressed', i === 1);
+    b.append(el('span', 'cups', icon), el('span', 'n', label), el('span', 'rs', 'Rs. ' + cups * rate));
+    tiers.append(b);
+  });
+  ask.append(tiers);
+
+  const total = el('div', 'total');
+  const amt = el('span', 'amt', 'Rs. ' + 3 * rate);
+  const amtCopy = el('button', 'copy-amt', 'Copy');
+  amtCopy.type = 'button';
+  total.append(el('span', 'mono', 'You send'), amt, amtCopy);
+  ask.append(total);
+
+  // nothing carries the amount into the payment app — the payer types it in themselves
+  ask.append(el('p', 'byhand', 'Enter this amount yourself when you pay — it is not filled in for you.'));
+
+  let cups = 3;
+  tiers.addEventListener('click', e => {
+    const b = e.target.closest('.tier');
+    if (!b) return;
+    for (const x of tiers.children) x.setAttribute('aria-pressed', x === b);
+    cups = Number(b.dataset.cups);
+    amt.textContent = 'Rs. ' + cups * rate;
+  });
+
+  amtCopy.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(String(cups * rate)); }
+    catch { return; }
+    amtCopy.textContent = 'Copied';
+    setTimeout(() => amtCopy.textContent = 'Copy', 1600);
+  });
+  card.append(ask);
+
+  /* ---- how to pay ---- */
+  const pays = el('div', 'pays');
+  [['eSewa', d.s], ['Khalti', d.k], ['Bank', d.a], ['Acct name', d.h]]
+    .filter(([, v]) => v)
+    .forEach(([label, v]) => {
+      const row = el('div', 'pay');
+      const btn = el('button', null, 'Copy');
+      btn.type = 'button';
+      btn.addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(v); }
+        catch { return; }                       // ponytail: no clipboard, no fallback — the text is right there
+        btn.textContent = 'Copied';
+        setTimeout(() => btn.textContent = 'Copy', 1600);
+      });
+      row.append(el('span', 'tag', label), el('span', 'v', v), btn);
+      pays.append(row);
+    });
+  card.append(pays);
+
+  /* ---- optional QR ---- */
+  if (d.q && /^https:\/\//i.test(d.q)) {
+    const qr = el('div', 'qr');
+    const img = el('img');
+    img.src = d.q;
+    img.alt = 'Payment QR for ' + d.n;
+    img.loading = 'lazy';
+    img.referrerPolicy = 'no-referrer';
+    qr.append(img, el('div', 'cap mono', 'Or scan with any bank app — then type the amount'));
+    card.append(qr);
+  }
+
+  root.append(card);
+}
+</script>
+
+</body>
+</html>

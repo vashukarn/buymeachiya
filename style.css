@@ -1,0 +1,177 @@
+/* Buy Me a Chiya — shared brutalist system. All three pages pull from here so they can't drift. */
+
+:root{
+  --cream:#FFF5DD;
+  --ink:#111111;
+  --yellow:#F4F242;
+  --magenta:#B82297;
+  --blue:#0000F4;
+  --amber:#FFB800;
+  --green:#64A852;
+  --line:3px solid var(--ink);
+  --pop:6px 6px 0 var(--ink);
+  --pop-sm:4px 4px 0 var(--ink);
+  --pop-lg:10px 10px 0 var(--ink);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Manrope',system-ui,sans-serif;
+  font-size:17px;
+  line-height:1.55;
+  overflow-x:hidden;
+}
+
+.wrap{width:min(1180px,92vw);margin-inline:auto}
+
+/* ---------- type ---------- */
+/* Archivo Black has no Devanagari — Mukta catches नाम in the same weight class */
+.display,h1,h2,h3,.btn,.logo b{
+  font-family:'Archivo Black','Mukta',system-ui,sans-serif;
+  font-weight:400;text-transform:uppercase;line-height:.92;letter-spacing:-.01em;
+}
+h1{font-size:clamp(2.6rem,7vw,5.6rem)}
+h2{font-size:clamp(1.9rem,4.4vw,3.4rem)}
+h3{font-size:1.15rem}
+
+.dev{font-family:'Mukta',sans-serif;font-weight:800;text-transform:none;letter-spacing:0;line-height:1.35}
+
+.mono{
+  font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:500;
+}
+
+a{color:inherit}
+
+/* ---------- brutalist primitives ---------- */
+.hl{ /* highlighter block behind text */
+  background:var(--yellow);border:var(--line);box-shadow:var(--pop);
+  display:inline-block;padding:.18em .35em;line-height:1;
+}
+/* the bordered block is taller than the line box — headings holding one need room */
+h1:has(.hl),h2:has(.hl){line-height:1.32}
+.box{background:#fff;border:var(--line);box-shadow:var(--pop)}
+.tilt{transform:rotate(-1.2deg)}
+.tilt-r{transform:rotate(1deg)}
+
+.btn{
+  display:inline-block;text-decoration:none;cursor:pointer;
+  background:var(--magenta);color:#fff;border:var(--line);box-shadow:var(--pop);
+  padding:15px 28px;font-size:1rem;
+  transition:transform .12s,box-shadow .12s;
+}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:var(--pop-lg)}
+.btn:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
+.btn-yellow{background:var(--yellow);color:var(--ink)}
+.btn-ink{background:var(--ink);color:var(--cream)}
+.btn-block{display:block;width:100%;text-align:center}
+
+/* ---------- nav ---------- */
+header{border-bottom:var(--line);background:var(--cream);position:sticky;top:0;z-index:50}
+nav{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 0}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none}
+.logo b{
+  background:var(--yellow);border:var(--line);box-shadow:var(--pop-sm);
+  padding:6px 12px;font-size:1.05rem;white-space:nowrap;
+}
+@media(max-width:400px){.logo b{font-size:.9rem;padding:5px 9px}}
+.logo .dev{font-size:.95rem}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a{text-decoration:none;font-weight:700;font-size:.95rem}
+.nav-links a:not(.btn):hover{background:var(--yellow);box-shadow:0 3px 0 var(--ink)}
+
+/* mobile menu — native <details>, no JS needed to open */
+.menu{display:none;position:relative}
+.menu summary{
+  list-style:none;cursor:pointer;width:46px;height:46px;
+  display:grid;place-content:center;gap:5px;
+  background:var(--yellow);border:var(--line);box-shadow:var(--pop-sm);
+}
+.menu summary::-webkit-details-marker{display:none}
+.menu summary i{display:block;width:20px;height:3px;background:var(--ink);transition:.2s}
+.menu[open] summary i:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.menu[open] summary i:nth-child(2){opacity:0}
+.menu[open] summary i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.menu-panel{
+  position:absolute;right:0;top:calc(100% + 12px);z-index:60;min-width:225px;
+  background:#fff;border:var(--line);box-shadow:var(--pop);padding:8px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.menu-panel a{padding:12px 14px;text-decoration:none;font-weight:700;border:2px solid transparent}
+.menu-panel a:hover{background:var(--yellow);border-color:var(--ink)}
+
+@media(max-width:820px){
+  .nav-links{display:none}
+  .menu{display:block}
+}
+
+/* ---------- ticker ---------- */
+.ticker{
+  background:var(--ink);color:var(--cream);border-block:var(--line);
+  overflow:hidden;white-space:nowrap;padding:11px 0;
+}
+.ticker div{display:inline-flex;gap:44px;padding-right:44px;animation:slide 26s linear infinite}
+.ticker span{display:inline-flex;gap:44px}
+@keyframes slide{to{transform:translateX(-100%)}}
+
+/* ---------- forms ---------- */
+label.lbl{display:block;margin-bottom:8px}
+.input,input[type=text],input[type=email],input[type=tel],textarea,select{
+  width:100%;font-family:'Manrope',sans-serif;font-size:1rem;font-weight:500;
+  background:#fff;color:var(--ink);border:var(--line);padding:13px 15px;
+  box-shadow:var(--pop-sm);
+}
+.input:focus,input:focus,textarea:focus,select:focus{
+  outline:none;background:var(--yellow);box-shadow:var(--pop);
+}
+textarea{resize:vertical;min-height:92px}
+.field{margin-bottom:24px}
+.hint{font-size:.85rem;margin-top:7px;opacity:.7}
+
+/* radio cards */
+.pick{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:620px){.pick{grid-template-columns:1fr}}
+.pick label{
+  display:block;cursor:pointer;background:#fff;border:var(--line);
+  box-shadow:var(--pop-sm);padding:16px;text-align:center;transition:.12s;
+}
+.pick input{position:absolute;opacity:0;pointer-events:none}
+.pick label:hover{transform:translate(-2px,-2px);box-shadow:var(--pop)}
+.pick label:has(input:checked){background:var(--yellow);box-shadow:var(--pop);transform:translate(-2px,-2px)}
+.pick label:has(input:focus-visible){outline:3px solid var(--magenta);outline-offset:3px}
+.pick b{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:.95rem;font-weight:400}
+.pick em{display:block;font-style:normal;font-size:.8rem;opacity:.7;margin-top:4px}
+
+/* ---------- legal pages ---------- */
+.prose{max-width:68ch;margin-inline:auto;padding:52px 0 80px}
+.prose .updated{margin-bottom:34px}
+.prose h1{margin-bottom:20px}
+.prose h2{font-size:clamp(1.2rem,2.6vw,1.6rem);margin:38px 0 12px;padding-top:22px;border-top:var(--line)}
+.prose h2:first-of-type{border-top:none;padding-top:0}
+.prose p{margin-bottom:14px}
+.prose ul{margin:0 0 16px 20px}
+.prose li{margin-bottom:9px}
+.prose .callout{background:var(--yellow);border:var(--line);box-shadow:var(--pop);padding:22px;margin:24px 0}
+.prose .callout p:last-child{margin-bottom:0}
+.prose .callout b{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:.95rem;display:block;margin-bottom:8px}
+
+/* ---------- footer ---------- */
+footer{border-top:var(--line);background:var(--ink);color:var(--cream);padding:46px 0}
+.foot{display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap;align-items:center}
+footer a{color:var(--yellow)}
+
+/* ---------- entrance ---------- */
+.rise{opacity:0;transform:translateY(18px);animation:up .6s cubic-bezier(.2,.8,.3,1) forwards}
+.rise:nth-child(2){animation-delay:.08s}
+.rise:nth-child(3){animation-delay:.16s}
+.rise:nth-child(4){animation-delay:.24s}
+@keyframes up{to{opacity:1;transform:none}}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .rise{opacity:1;transform:none}
+  .ticker div{animation:none}
+}

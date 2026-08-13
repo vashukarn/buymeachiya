@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make your page — Buy Me a Chiya</title>
+<meta name="description" content="Fill in four boxes, get a link to your own chiya page. No account, no server, no cut.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mukta:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<style>
+.make{display:grid;grid-template-columns:1.2fr .8fr;gap:52px;padding:48px 0 88px;align-items:start}
+@media(max-width:940px){.make{grid-template-columns:1fr;gap:38px;padding:34px 0 60px}}
+
+.head{margin-bottom:38px}
+.head .dev{font-size:1.1rem;color:var(--magenta);margin-bottom:12px}
+.head h1{font-size:clamp(2.2rem,5vw,3.6rem)}
+.head p{margin-top:18px;max-width:46ch}
+
+.step{background:#fff;border:var(--line);box-shadow:var(--pop);padding:30px;margin-bottom:26px;position:relative}
+.step > .num{
+  position:absolute;top:-19px;left:-19px;width:46px;height:46px;
+  background:var(--magenta);color:#fff;border:var(--line);display:grid;place-items:center;
+  font-family:'Archivo Black',sans-serif;font-size:1.15rem;
+}
+.step h3{margin-bottom:6px}
+.step > .sub{font-size:.92rem;opacity:.72;margin-bottom:22px}
+
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:620px){.row{grid-template-columns:1fr}}
+
+.pay-row{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.pay-row .tag{
+  flex:none;width:104px;background:var(--yellow);border:var(--line);box-shadow:var(--pop-sm);
+  padding:12px 8px;text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+}
+.pay-row input{margin:0}
+
+/* preview */
+.preview{position:sticky;top:100px}
+@media(max-width:940px){.preview{position:static}}
+.pv-card{background:var(--yellow);border:var(--line);box-shadow:var(--pop-lg);padding:26px;text-align:center}
+.pv-emoji{font-size:4.4rem;line-height:1}
+.pv-name{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:1.3rem;line-height:1.05;margin-top:10px}
+.pv-bio{font-size:.92rem;margin-top:12px;min-height:2.6em}
+.pv-tiers{display:flex;gap:8px;justify-content:center;margin-top:16px}
+.pv-tiers span{
+  flex:1;background:#fff;border:var(--line);padding:9px 4px;
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;
+}
+.pv-pay{margin-top:16px;padding-top:14px;border-top:var(--line);
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;text-align:left}
+.pv-pay div{margin-bottom:5px;word-break:break-all}
+
+.reassure{margin-top:24px;background:#fff;border:var(--line);box-shadow:var(--pop-sm);padding:20px}
+.reassure li{list-style:none;display:flex;gap:10px;font-size:.9rem;margin-bottom:11px}
+.reassure li:last-child{margin-bottom:0}
+.reassure b{color:var(--magenta);font-family:'Archivo Black',sans-serif;flex:none}
+
+/* result */
+.result{display:none;padding:60px 0 90px;text-align:center}
+.result.on{display:block}
+.result h2{margin-bottom:20px}
+.link-box{
+  display:flex;gap:0;max-width:780px;margin:24px auto 12px;border:var(--line);box-shadow:var(--pop);background:#fff;
+}
+.link-box input{border:none!important;box-shadow:none!important;font-family:'JetBrains Mono',monospace;font-size:.85rem}
+.link-box button{
+  flex:none;border:none;border-left:var(--line);background:var(--yellow);cursor:pointer;padding:0 22px;
+  font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:.85rem;
+}
+.link-box button:hover{background:var(--magenta);color:#fff}
+.result .acts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.warn{max-width:52ch;margin:30px auto 0;background:var(--yellow);border:var(--line);box-shadow:var(--pop-sm);padding:18px;font-size:.9rem;text-align:left}
+.shorten{max-width:52ch;margin:36px auto 0;background:#fff;border:var(--line);box-shadow:var(--pop-sm);padding:22px;text-align:left}
+.shorten b{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:.95rem;display:block;margin-bottom:8px}
+.shorten p{font-size:.9rem;margin-bottom:12px}
+.shorten .caution{border-left:4px solid var(--magenta);padding-left:12px;opacity:.85}
+.shorten .btn{font-size:.85rem;padding:11px 20px}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a class="logo" href="index.html"><b>Buy Me a Chiya</b><span class="dev">चिया खुवाऊ</span></a>
+    <div class="nav-links">
+      <a href="index.html#how">How it works</a>
+      <a href="index.html#why">Why local</a>
+    </div>
+    <details class="menu" id="menu">
+      <summary aria-label="Menu"><i></i><i></i><i></i></summary>
+      <div class="menu-panel">
+        <a href="index.html#how">How it works</a>
+        <a href="index.html#why">Why local</a>
+      </div>
+    </details>
+  </nav>
+</header>
+
+<div class="ticker">
+  <div class="mono">
+    <span>No account · No server · No company · No cut · Your link, your money ·</span>
+    <span aria-hidden="true">No account · No server · No company · No cut · Your link, your money ·</span>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <form class="make" id="form" novalidate>
+    <div>
+      <div class="head rise">
+        <div class="dev">आफ्नो पेज बनाउनुहोस्</div>
+        <h1>Make your <span class="hl tilt">page</span></h1>
+        <p>Fill this in and you get a link. That link <em>is</em> your page — everything is stored inside the URL itself. Nothing is sent anywhere, and there's nothing to sign up for.</p>
+      </div>
+
+      <section class="step rise">
+        <div class="num">1</div>
+        <h3>Who are you?</h3>
+        <p class="sub">Shown at the top of your page.</p>
+
+        <div class="field">
+          <label class="lbl mono" for="name">Your name</label>
+          <input id="name" type="text" placeholder="Vashu Karn" autocomplete="name">
+        </div>
+
+        <div class="field" style="margin-bottom:0">
+          <label class="lbl mono" for="bio">One line about what you make</label>
+          <input id="bio" type="text" maxlength="90" placeholder="I build small tools for Nepal.">
+          <div class="hint"><span id="bioCount">0</span>/90</div>
+        </div>
+      </section>
+
+      <section class="step rise">
+        <div class="num">2</div>
+        <h3>Price of one chiya</h3>
+        <p class="sub">Your page offers 1, 3 and 10 of these.</p>
+
+        <div class="row">
+          <div class="field" style="margin-bottom:0">
+            <label class="lbl mono" for="rate">Rupees per chiya</label>
+            <input id="rate" type="text" inputmode="numeric" value="50">
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <label class="lbl mono" for="emoji">Your emoji</label>
+            <input id="emoji" type="text" maxlength="4" value="🍵">
+          </div>
+        </div>
+      </section>
+
+      <section class="step rise">
+        <div class="num">3</div>
+        <h3>Where people pay you</h3>
+        <p class="sub">Fill in whichever you use. These go on your page as text, so supporters can pay you directly — they never pass through us.</p>
+
+        <div class="pay-row">
+          <span class="tag">eSewa</span>
+          <input id="esewa" type="tel" inputmode="numeric" placeholder="98XXXXXXXX">
+        </div>
+        <div class="pay-row">
+          <span class="tag">Khalti</span>
+          <input id="khalti" type="tel" inputmode="numeric" placeholder="98XXXXXXXX">
+        </div>
+        <div class="pay-row">
+          <span class="tag">Bank</span>
+          <input id="bank" type="text" placeholder="Nabil Bank · 0123456789012">
+        </div>
+        <div class="pay-row" style="margin-bottom:0">
+          <span class="tag">Acct name</span>
+          <input id="holder" type="text" placeholder="Name exactly as on the account">
+        </div>
+        <div class="hint">Banks show the account name before the transfer confirms — without it, supporters can't tell they've got the right person.</div>
+      </section>
+
+      <section class="step rise">
+        <div class="num">4</div>
+        <h3>Your QR (optional)</h3>
+        <p class="sub">Save your Fonepay QR from your banking app, upload it anywhere public, and paste the image link. Leave it blank to skip.</p>
+
+        <div class="field" style="margin-bottom:0">
+          <label class="lbl mono" for="qr">Image URL</label>
+          <input id="qr" type="text" placeholder="https://.../my-fonepay-qr.png" spellcheck="false">
+          <div class="hint">Must start with https://</div>
+        </div>
+
+        <button class="btn btn-block" type="submit" style="margin-top:26px">Make my link →</button>
+        <div class="status bad" id="err" style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:.78rem;text-transform:uppercase;margin-top:12px"></div>
+      </section>
+    </div>
+
+    <aside class="preview">
+      <span class="mono" style="display:block;margin-bottom:14px">Live preview</span>
+      <div class="pv-card tilt-r">
+        <div class="pv-emoji" id="pvEmoji">🍵</div>
+        <div class="pv-name" id="pvName">Your name</div>
+        <div class="pv-bio" id="pvBio">Your one-liner shows up here.</div>
+        <div class="pv-tiers" id="pvTiers"><span>Rs. 50</span><span>Rs. 150</span><span>Rs. 500</span></div>
+        <div class="pv-pay" id="pvPay"><div>Add a payment method →</div></div>
+      </div>
+
+      <ul class="reassure">
+        <li><b>0%</b><span>There is no cut. We never see the money — it goes straight to you.</span></li>
+        <li><b>0</b><span>accounts, servers and databases. Your page is just a link.</span></li>
+        <li><b>NPR</b><span>start to finish. No Stripe, no foreign bank.</span></li>
+      </ul>
+    </aside>
+  </form>
+
+  <section class="result" id="result">
+    <h2>Here's your <span class="hl tilt">link</span></h2>
+    <p>Put it in your bio. Anyone who opens it sees your page.</p>
+
+    <div class="link-box">
+      <input id="out" type="text" readonly>
+      <button type="button" id="copy">Copy</button>
+    </div>
+
+    <div class="acts">
+      <a class="btn btn-yellow" id="open" href="#" target="_blank" rel="noopener">Open my page →</a>
+      <button class="btn btn-ink" type="button" id="again">Edit it</button>
+    </div>
+
+    <div class="shorten">
+      <b>Too long for your bio?</b>
+      <p>You can shorten it yourself with TinyURL. We're not involved — the link opens their site with yours filled in, and you click their button.</p>
+      <p class="caution">Worth knowing first: shortening hands your payment details to TinyURL, who keep them. Your link works fine unshortened, and a link in a bio gets tapped, not read.</p>
+      <a class="btn btn-yellow" id="tiny" href="#" target="_blank" rel="noopener noreferrer">Shorten at TinyURL ↗</a>
+    </div>
+
+    <div class="warn">
+      <b>Keep this link safe.</b> There's no account to log back into — the link is the only copy of your page. Bookmark it. To change anything, come back here and make a new one.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="display" style="font-size:1.1rem">Buy Me a Chiya <span class="dev" style="color:var(--yellow)">चिया खुवाऊ</span></div>
+    <div class="mono">
+      <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> ·
+      Made by <a href="https://vijaykarn.com.np" target="_blank" rel="noopener">Vashu Karn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+menu.addEventListener('click', e => { if (e.target.closest('a')) menu.open = false; });
+
+const FIELDS = ['name','bio','rate','emoji','esewa','khalti','bank','holder','qr'];
+const val = id => $(id).value.trim();
+
+function tiers(){
+  const r = Math.max(1, parseInt(val('rate'), 10) || 50);
+  return [r, r * 3, r * 10];
+}
+
+function draw(){
+  $('pvEmoji').textContent = val('emoji') || '🍵';
+  $('pvName').textContent  = val('name') || 'Your name';
+  $('pvBio').textContent   = val('bio')  || 'Your one-liner shows up here.';
+  $('bioCount').textContent = val('bio').length;
+
+  $('pvTiers').replaceChildren(...tiers().map(n => {
+    const s = document.createElement('span');
+    s.textContent = 'Rs. ' + n;
+    return s;
+  }));
+
+  const pays = [['eSewa','esewa'],['Khalti','khalti'],['Bank','bank'],['Acct name','holder']]
+    .filter(([,id]) => val(id))
+    .map(([label,id]) => label + ' → ' + val(id));
+
+  $('pvPay').replaceChildren(...(pays.length ? pays : ['Add a payment method →']).map(t => {
+    const d = document.createElement('div');
+    d.textContent = t;
+    return d;
+  }));
+}
+
+FIELDS.forEach(id => $(id).addEventListener('input', draw));
+draw();
+
+/* ---- build the link ---- */
+/* The page IS the URL, so every character counts. Fields go in a fixed order joined by
+   \x1f (a control char nobody can type, so no escaping), trailing empties dropped, then
+   base64url with the padding stripped. Roughly 40% shorter than the JSON it replaced. */
+function encode(){
+  const parts = [
+    val('name'), val('bio'), String(tiers()[0]), val('emoji') || '🍵',
+    val('esewa'), val('khalti'), val('bank'), val('holder'), val('qr')
+  ];
+  while (parts.length && !parts[parts.length - 1]) parts.pop();
+  return btoa(unescape(encodeURIComponent(parts.join('\x1f'))))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+$('form').addEventListener('submit', e => {
+  e.preventDefault();
+  const err = $('err');
+
+  if (!val('name')) return err.textContent = 'Add your name';
+  if (!val('esewa') && !val('khalti') && !val('bank'))
+    return err.textContent = 'Add at least one way to pay you';
+  // a bank number without the account name is unconfirmable at the other end
+  if (val('bank') && !val('holder'))
+    return err.textContent = 'Bank transfers need the account name';
+  // only https images — a javascript: or data: URL here would run on every visitor's page
+  if (val('qr') && !/^https:\/\//i.test(val('qr')))
+    return err.textContent = 'QR link must start with https://';
+
+  err.textContent = '';
+
+  const url = location.href.replace(/make\.html.*$/, '') + 'page.html#' + encode();
+  $('out').value = url;
+  $('open').href = url;
+  // TinyURL's own form, prefilled — the creator presses the button there, not here
+  $('tiny').href = 'https://tinyurl.com/create.php?url=' + encodeURIComponent(url);
+  $('form').style.display = 'none';
+  $('result').classList.add('on');
+  scrollTo({top: 0, behavior: 'smooth'});
+
+  // count that a link was made — the tally only, never the link or anything inside it
+  window.goatcounter?.count({ path: 'link-created', title: 'Link created', event: true });
+});
+
+$('copy').addEventListener('click', async () => {
+  $('out').select();
+  try { await navigator.clipboard.writeText($('out').value); }
+  catch { document.execCommand('copy'); }   // ponytail: fallback for file:// and old Safari
+  $('copy').textContent = 'Copied!';
+  setTimeout(() => $('copy').textContent = 'Copy', 1600);
+});
+
+$('again').addEventListener('click', () => {
+  $('result').classList.remove('on');
+  $('form').style.display = '';
+  scrollTo({top: 0, behavior: 'smooth'});
+});
+</script>
+
+<!-- Visit counting. No cookies, no personal data, aggregate only.
+     Replace the subdomain below with your own account code. -->
+<script data-goatcounter="https://buymeachiya.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+</body>
+</html>

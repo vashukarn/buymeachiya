@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buy Me a Chiya — चिया खुवाऊ · Get tipped in Nepal, with no middleman</title>
+<meta name="description" content="A free tool that turns your eSewa, Khalti or bank details into a shareable tip page. No account, no company, no cut — supporters pay you directly.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mukta:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:60px 0 74px}
+@media(max-width:940px){.hero{grid-template-columns:1fr;gap:30px;padding:38px 0 52px}}
+
+.eyebrow{
+  display:inline-block;background:var(--ink);color:var(--yellow);
+  border:var(--line);box-shadow:var(--pop-sm);padding:8px 15px;margin-bottom:24px;
+}
+h1 .dev{display:block;font-size:.4em;color:var(--magenta);margin-bottom:.35em}
+.lede{margin-top:28px;font-size:1.12rem;max-width:46ch}
+.lede b{background:var(--yellow);padding:1px 5px;box-shadow:2px 2px 0 var(--ink)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:34px}
+.hero-cta .mono{opacity:.75}
+
+/* one big chiya */
+.big-chiya{
+  font-size:clamp(9rem,26vw,20rem);line-height:1;text-align:center;
+  filter:drop-shadow(10px 10px 0 rgba(17,17,17,.14));
+  animation:bob 4.5s ease-in-out infinite;cursor:default;user-select:none;
+}
+@keyframes bob{
+  0%,100%{transform:translateY(0) rotate(-2deg)}
+  50%{transform:translateY(-16px) rotate(2deg)}
+}
+
+/* ---------- bands ---------- */
+section.band{padding:80px 0;border-top:var(--line)}
+h2 .dev{display:block;font-size:.36em;color:var(--magenta);margin-bottom:.4em}
+.sub{margin-top:18px;max-width:54ch}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+@media(max-width:820px){.steps{grid-template-columns:1fr}}
+.step-card{background:#fff;border:var(--line);box-shadow:var(--pop);padding:30px;transition:transform .14s,box-shadow .14s}
+.step-card:hover{transform:translate(-3px,-3px);box-shadow:var(--pop-lg)}
+.step-card b{
+  display:inline-grid;place-items:center;width:52px;height:52px;margin-bottom:18px;
+  background:var(--yellow);border:var(--line);
+  font-family:'Mukta',sans-serif;font-weight:800;font-size:1.5rem;
+}
+.step-card h3{margin-bottom:9px}
+.step-card p{font-size:.96rem;opacity:.85}
+
+/* example */
+.example{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:860px){.example{grid-template-columns:1fr;gap:32px}}
+.shot{background:#fff;border:var(--line);box-shadow:var(--pop-lg);padding:30px;text-align:center}
+.shot .em{font-size:4.6rem;line-height:1}
+.shot .nm{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:1.35rem;margin-top:10px}
+.shot .bi{font-size:.94rem;margin-top:10px;opacity:.8}
+.shot .tt{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:20px}
+.shot .tt span{background:var(--cream);border:var(--line);padding:11px 4px;font-family:'JetBrains Mono',monospace;font-size:.75rem}
+.shot .pp{margin-top:18px;padding-top:14px;border-top:var(--line);font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;text-align:left}
+
+/* why */
+.why{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start}
+@media(max-width:860px){.why{grid-template-columns:1fr;gap:34px}}
+.compare{border:var(--line);box-shadow:var(--pop);background:#fff}
+.compare div{display:flex;justify-content:space-between;gap:16px;padding:15px 20px;font-size:.96rem;border-bottom:2px solid var(--ink)}
+.compare div:last-child{border-bottom:none}
+.compare div:nth-child(even){background:var(--cream)}
+.no{color:#B8221F;font-weight:800}
+.yes{color:var(--magenta);font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:.9rem}
+
+/* honesty box */
+.plain{background:var(--ink);color:var(--cream);border:var(--line);box-shadow:var(--pop);padding:30px;margin-top:40px}
+.plain h3{color:var(--yellow);margin-bottom:12px}
+.plain p{font-size:.98rem;max-width:62ch}
+
+.cta{background:var(--yellow);border-top:var(--line);padding:74px 0;text-align:center}
+.cta p{margin:18px auto 30px;max-width:46ch}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a class="logo" href="#top"><b>Buy Me a Chiya</b><span class="dev">चिया खुवाऊ</span></a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#why">Why local</a>
+      <a class="btn btn-yellow" href="make.html">Make your page</a>
+    </div>
+    <details class="menu" id="menu">
+      <summary aria-label="Menu"><i></i><i></i><i></i></summary>
+      <div class="menu-panel">
+        <a href="#how">How it works</a>
+        <a href="#why">Why local</a>
+        <a href="#example">See an example</a>
+        <a href="make.html">Make your page</a>
+      </div>
+    </details>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="wrap hero">
+    <div>
+      <div class="eyebrow mono rise">Built for Nepal</div>
+      <h1 class="rise">
+        <span class="dev">मलाई एक कप चिया खुवाउनुहोस्</span>
+        Get paid in <span class="hl tilt">chiya</span>, not paperwork.
+      </h1>
+      <p class="lede rise">
+        Buy Me a Coffee pays out through Stripe, which <b>doesn't work in Nepal</b>.
+        So this isn't a platform — it's a free tool that turns your eSewa, Khalti or bank
+        details into a page you can share. Supporters pay you directly. Nobody takes a cut,
+        because nobody is in the middle.
+      </p>
+      <div class="hero-cta rise">
+        <a class="btn" href="make.html">Make your page</a>
+        <span class="mono">Free · No account · Takes a minute</span>
+      </div>
+    </div>
+
+    <div class="big-chiya" role="img" aria-label="A glass of chiya">🍵</div>
+  </section>
+
+  <div class="ticker">
+    <div class="mono">
+      <span>No account · No server · No company · No cut · कति चिया? · Your link, your money ·</span>
+      <span aria-hidden="true">No account · No server · No company · No cut · कति चिया? · Your link, your money ·</span>
+    </div>
+  </div>
+
+  <!-- ===== how ===== -->
+  <section class="band" id="how">
+    <div class="wrap">
+      <h2><span class="dev">कसरी चल्छ</span>Three steps.<br>No forms in triplicate.</h2>
+      <p class="sub">There's nothing to sign up for. You fill in a form, you get a link, the link is your page.</p>
+
+      <div class="steps">
+        <div class="step-card">
+          <b>१</b>
+          <h3>Fill in four boxes</h3>
+          <p>Your name, one line about what you make, the price of a chiya, and where people can pay you.</p>
+        </div>
+        <div class="step-card">
+          <b>२</b>
+          <h3>Get your link</h3>
+          <p>Your whole page is packed into the URL itself. Nothing is sent to us — there's no us to send it to.</p>
+        </div>
+        <div class="step-card">
+          <b>३</b>
+          <h3>Put it in your bio</h3>
+          <p>Supporters open it, copy your eSewa, Khalti or bank details, and send the money from their own app. You get 100%.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== example ===== -->
+  <section class="band" id="example">
+    <div class="wrap example">
+      <div>
+        <h2><span class="dev">यस्तो देखिन्छ</span>This is the whole thing.</h2>
+        <p class="sub">
+          One page, your emoji, your prices, your payment details. Supporters copy your number
+          or scan your Fonepay QR and send it from their own banking app — the same way they'd pay a friend.
+          It's an instructions page, not a checkout: no card form, no redirect, nothing to go wrong in the middle.
+        </p>
+        <a class="btn" style="margin-top:26px" href="page.html#VmFzaHUgS2Fybh9JIGJ1aWxkIHNtYWxsIHRvb2xzIGZvciBOZXBhbC4fNTAf8J-NtR85ODAwMDAwMDAwHx9OYWJpbCBCYW5rIMK3IDAxMjM0NTY3ODkwMTIfVkFTSFUgS0FSTg">Open a live example →</a>
+      </div>
+
+      <div class="shot tilt-r">
+        <div class="em">🍵</div>
+        <div class="nm">Vashu Karn</div>
+        <div class="bi">I build small tools for Nepal.</div>
+        <div class="tt"><span>Rs. 50</span><span>Rs. 150</span><span>Rs. 500</span></div>
+        <div class="pp">
+          <div>eSewa → 98XXXXXXXX</div>
+          <div>Bank → Nabil · 0123…</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== why ===== -->
+  <section class="band" id="why">
+    <div class="wrap why">
+      <div>
+        <h2><span class="dev">किन स्थानीय</span>The foreign platforms can't pay you.</h2>
+        <p class="sub">
+          It isn't a bug you can work around with a VPN. Buy Me a Coffee, Ko-fi and Patreon all
+          settle through Stripe or PayPal, and neither supports payouts to Nepal. Creators here end up
+          borrowing a relative's foreign account, or giving up. This starts from the other end:
+          your own account, from the first rupee.
+        </p>
+      </div>
+
+      <div class="compare">
+        <div><span>Platform's cut</span><span class="yes">Zero</span></div>
+        <div><span>Account needed</span><span class="no">None</span></div>
+        <div><span>Needs Stripe / PayPal</span><span class="no">No</span></div>
+        <div><span>Who holds your money</span><span class="yes">You do</span></div>
+        <div><span>Supporter pays with</span><span class="yes">Any bank app</span></div>
+        <div><span>Currency</span><span class="yes">NPR</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0;border:none">
+    <div class="wrap">
+      <div class="plain">
+        <h3>What this is not</h3>
+        <p>
+          There's no company, no wallet, no balance and no database. Nothing tracks who paid you —
+          if you want a record, that's your bank statement. Your link is the only copy of your page,
+          so keep it somewhere safe. Lose it and you just make a new one.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2>Start collecting chiya</h2>
+      <p>Free, forever. You keep every rupee, because it never leaves your hands.</p>
+      <a class="btn btn-ink" href="make.html">Make your page →</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="display" style="font-size:1.1rem">Buy Me a Chiya <span class="dev" style="color:var(--yellow)">चिया खुवाऊ</span></div>
+    <div class="mono">
+      <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> ·
+      Made by <a href="https://vijaykarn.com.np" target="_blank" rel="noopener">Vashu Karn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// close the mobile menu after tapping a link (details stays open on same-page anchors)
+menu.addEventListener('click', e => { if (e.target.closest('a')) menu.open = false; });
+</script>
+
+<!-- Visit counting. No cookies, no personal data, aggregate only.
+     Replace the subdomain below with your own account code. -->
+<script data-goatcounter="https://buymeachiya.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+</body>
+</html>
