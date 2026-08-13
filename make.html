@@ -35,9 +35,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-KHF4Z8ST');</script>
 <!-- End Google Tag Manager -->
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mukta:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="style.css">
 
 <style>
@@ -110,6 +108,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 .shorten p{font-size:.9rem;margin-bottom:12px}
 .shorten .caution{border-left:4px solid var(--magenta);padding-left:12px;opacity:.85}
 .shorten .btn{font-size:.85rem;padding:11px 20px}
+.qr-block{max-width:52ch;margin:36px auto 0;background:#fff;border:var(--line);box-shadow:var(--pop-sm);padding:22px;text-align:center}
+.qr-block b{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:.95rem;display:block;margin-bottom:8px}
+.qr-block p{font-size:.9rem;margin-bottom:16px}
+.qr-holder{display:inline-block;background:#fff;border:var(--line);box-shadow:var(--pop);padding:14px;line-height:0}
+.qr-holder canvas{display:block;width:224px;height:224px;image-rendering:pixelated}
+.qr-block .btn{margin-top:18px;font-size:.85rem;padding:11px 20px}
 </style>
 </head>
 <body>
@@ -259,6 +263,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="btn btn-ink" type="button" id="again">Edit it</button>
     </div>
 
+    <div class="qr-block">
+      <b>Or share a QR</b>
+      <p>Print it, stick it on your stall, or drop it in a story. It opens your page, so people can pick an amount themselves.</p>
+      <div class="qr-holder"><canvas id="qr" width="224" height="224"></canvas></div>
+      <br>
+      <button class="btn btn-yellow" type="button" id="dlQr">Download PNG</button>
+    </div>
+
     <div class="shorten">
       <b>Too long for your bio?</b>
       <p>You can shorten it yourself with TinyURL. We're not involved — the link opens their site with yours filled in, and you click their button.</p>
@@ -290,6 +302,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </footer>
 
+<script src="lib/qrcode-generator.js"></script>
 <script>
 const $ = id => document.getElementById(id);
 menu.addEventListener('click', e => { if (e.target.closest('a')) menu.open = false; });
@@ -364,6 +377,7 @@ $('form').addEventListener('submit', e => {
   $('open').href = url;
   // TinyURL's own form, prefilled — the creator presses the button there, not here
   $('tiny').href = 'https://tinyurl.com/create.php?url=' + encodeURIComponent(url);
+  drawQr(url);
   $('embed').value = '<script src="' + location.href.replace(/make\.html.*$/, '') +
     'embed.js" data-chiya="' + hash + '"><' + '/script>';
   $('form').style.display = 'none';
@@ -373,6 +387,34 @@ $('form').addEventListener('submit', e => {
   // count that a link was made — the tally only, never the link or anything inside it
   window.dataLayer = window.dataLayer || [];
   dataLayer.push({ event: 'link_created' });
+});
+
+/* QR of the page link, drawn on a canvas at 8px per module so the PNG is crisp
+   when printed. Level M: nothing overlays the code, so heavy correction is wasted size. */
+function drawQr(text){
+  const qr = qrcode(0, 'M');
+  qr.addData(text);
+  qr.make();
+
+  const n = qr.getModuleCount(), quiet = 4, px = 8;
+  const size = (n + quiet * 2) * px;
+  const c = $('qr');
+  c.width = c.height = size;
+
+  const g = c.getContext('2d');
+  g.fillStyle = '#fff';
+  g.fillRect(0, 0, size, size);
+  g.fillStyle = '#111';
+  for (let r = 0; r < n; r++)
+    for (let col = 0; col < n; col++)
+      if (qr.isDark(r, col)) g.fillRect((col + quiet) * px, (r + quiet) * px, px, px);
+}
+
+$('dlQr').addEventListener('click', () => {
+  const a = document.createElement('a');
+  a.download = 'buymeachiya-qr.png';
+  a.href = $('qr').toDataURL('image/png');
+  a.click();
 });
 
 $('copy').addEventListener('click', async () => {
