@@ -16,6 +16,24 @@ Supporters pay the creator's own account directly from their own banking or wall
 No money passes through this site, which is what keeps it out of Nepal Rastra Bank's
 payment-service-provider regime.
 
+## Embed it on your own site
+
+Anyone can put their card on their own website with one tag:
+
+```html
+<script src="https://buymeachiya.vijaykarn.com.np/embed.js"
+        data-chiya="YOUR_CODE"></script>
+```
+
+`YOUR_CODE` is the part of your page link after the `#`. Pasting the whole link works
+too. Optional: `data-width="380px"` to change the maximum width (default `340px`).
+
+The tag replaces itself with a sandboxed iframe pointing at `embed.html`, which reports
+its height back so the card never clips. The embed loads no external fonts or
+stylesheets, so it adds no third-party requests to the host page.
+
+![Buy Me a Chiya](linkedin.png)
+
 ## Files
 
 | File | Purpose |
@@ -23,7 +41,10 @@ payment-service-provider regime.
 | `index.html` | Landing page |
 | `make.html` | Generator — builds the link |
 | `page.html` | Renders a creator's page from the URL fragment |
+| `embed.html` | Compact card rendered inside the iframe |
+| `embed.js` | One-tag loader that hosts paste on their site |
 | `terms.html`, `privacy.html` | Legal pages |
+| `linkedin.png`, `linkedin-source.html` | Share image and the template it renders from |
 | `style.css` | Shared styles for every page |
 
 ## Notes for anyone editing this
