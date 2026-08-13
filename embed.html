@@ -134,8 +134,20 @@ if (!d || !d.n) {
       const btn = el('button', null, 'Copy');
       btn.type = 'button';
       btn.addEventListener('click', async () => {
-        try { await navigator.clipboard.writeText(v); }
-        catch { return; }               // clipboard is often blocked in a cross-site frame
+        try {
+          await navigator.clipboard.writeText(v);
+        } catch {
+          // some hosts still block the clipboard — select the number so it can be
+          // copied by hand rather than leaving a button that does nothing
+          const r = document.createRange();
+          r.selectNodeContents(row.querySelector('.v'));
+          const sel = getSelection();
+          sel.removeAllRanges();
+          sel.addRange(r);
+          btn.textContent = 'Select';
+          setTimeout(() => btn.textContent = 'Copy', 1800);
+          return;
+        }
         btn.textContent = 'Copied';
         setTimeout(() => btn.textContent = 'Copy', 1500);
       });

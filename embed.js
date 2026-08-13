@@ -28,8 +28,12 @@
   frame.title = 'Buy me a chiya';
   frame.loading = 'lazy';
   frame.setAttribute('scrolling', 'no');
-  // the frame only needs to run its own script and open the credit link
-  frame.setAttribute('sandbox', 'allow-scripts allow-popups allow-popups-to-escape-sandbox');
+  // allow-same-origin is needed for two reasons: without it the frame gets an opaque
+  // origin, so its height messages arrive as origin "null" and cannot be verified, and
+  // the clipboard is unavailable. It does NOT grant any access to the host page.
+  frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox');
+  // cross-origin frames get no clipboard unless the host delegates it here
+  frame.setAttribute('allow', 'clipboard-write');
   frame.style.cssText =
     'width:100%;max-width:' + width + ';height:430px;border:0;display:block;' +
     'color-scheme:normal;background:transparent;overflow:hidden';
