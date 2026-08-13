@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Individual tip pages carry payment details in the URL and are noindex.
+# They are not content — every one is the same file with different data.
+Disallow: /page.html
+
+Sitemap: https://buymeachiya.vijaykarn.com.np/sitemap.xml
